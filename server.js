@@ -26,8 +26,20 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/shortUrls", async (req, res) => {
-  await ShortUrl.create({ full: req.body.fullUrl });
+  if(req.body.alias){
+  const alias=await ShortUrl.findOne({short: req.body.alias});
+  if(alias){
+     res.send(`<h3> This alias already exists <a href="/" > Try another one </a> </h3>`)
+  }
+  else{
+  await ShortUrl.create({ full: req.body.fullUrl, short: req.body.alias });
   res.redirect("/");
+  }
+}
+else{
+await ShortUrl.create({ full: req.body.fullUrl});
+res.redirect("/");
+}
 });
 app.get("/:shortUrl", async (req, res) => {
   const shortUrl = await ShortUrl.findOne({ short: req.params.shortUrl });
