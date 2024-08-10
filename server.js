@@ -29,7 +29,7 @@ app.post("/shortUrls", async (req, res) => {
   if(req.body.alias){
   const alias=await ShortUrl.findOne({short: req.body.alias});
   if(alias){
-     res.send(`<h3> This alias already exists <a href="/" > Try another one </a> </h3>`)
+     res.render('pagenotfound');
   }
   else{
   await ShortUrl.create({ full: req.body.fullUrl, short: req.body.alias });
